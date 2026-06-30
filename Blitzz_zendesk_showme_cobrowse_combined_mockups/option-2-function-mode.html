@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Blitzz Unified · Option 2 — Function → Mode</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<style>
+  :root { --blitzz: #2b6cb0; --zd-border: #e5e7eb; --zd-text: #2f3941; --zd-muted: #68737d; --zd-rail-bg: #f7fafc; --pill-active-bg: #ebf3fc; }
+  html, body { height: 100%; margin: 0; background: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--zd-text); font-size: 14px; }
+
+  .zd-app { height: 100vh; display: grid; grid-template-rows: auto auto 1fr; }
+  .zd-tour { background: #d9eafd; color: #2d3748; display: flex; align-items: center; gap: 10px; padding: 5px 16px; font-size: 13px; }
+  .zd-tour i.bi-info-circle { color: #3182ce; font-size: 16px; }
+  .zd-tour .tour-strong { font-weight: 600; }
+  .zd-tour .tour-text { color: #4a5568; }
+  .zd-tour a { color: #2b6cb0; text-decoration: none; font-weight: 500; }
+  .zd-tour .spacer { flex: 1; }
+  .zd-tour .tour-btn { background: #fff; border: 1px solid #cbd5e0; border-radius: 4px; padding: 4px 12px; font-size: 12px; cursor: pointer; color: var(--zd-text); }
+  .zd-tour .tour-close { background: transparent; border: none; cursor: pointer; color: #718096; font-size: 18px; padding: 0 4px; }
+
+  .zd-header { background: #fff; border-bottom: 1px solid var(--zd-border); display: flex; align-items: center; gap: 16px; padding: 0 16px; height: 48px; flex-shrink: 0; }
+  .zd-header .z-logo { width: 28px; height: 28px; background: #03363d; color: #fff; border-radius: 4px; display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+  .zd-product { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--zd-text); cursor: pointer; padding: 4px 8px; border-radius: 4px; }
+  .zd-product:hover { background: #f1f5f9; }
+  .zd-tabs { display: flex; align-items: center; gap: 4px; }
+  .zd-tab { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--zd-border); border-radius: 6px; padding: 6px 10px; font-size: 13px; cursor: pointer; max-width: 240px; }
+  .zd-tab i.bi-headset { color: #3182ce; flex-shrink: 0; font-size: 14px; }
+  .zd-tab .tab-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .zd-tab .tab-id { color: var(--zd-muted); font-size: 12px; }
+  .zd-tab .tab-close { color: #a0aec0; cursor: pointer; font-size: 12px; padding: 0 2px; }
+  .zd-tab .tab-close:hover { color: var(--zd-text); }
+  .zd-tab-add { width: 28px; height: 28px; border: 1px solid var(--zd-border); background: #fff; border-radius: 4px; cursor: pointer; color: #718096; display: grid; place-items: center; }
+  .zd-spacer { flex: 1; }
+  .zd-actions { display: flex; align-items: center; gap: 14px; color: #4a5568; }
+  .zd-actions i { font-size: 16px; cursor: pointer; }
+  .zd-actions .convs { display: inline-flex; align-items: center; gap: 6px; background: #f1f5f9; padding: 4px 10px; border-radius: 4px; font-size: 13px; }
+  .zd-actions .convs .num { color: var(--zd-muted); }
+  .zd-actions .ic-btn { padding: 4px; }
+
+  .zd-body { display: grid; grid-template-columns: 56px var(--props-w, 240px) 1fr 6px var(--panel-w, 360px) 36px; overflow: hidden; transition: grid-template-columns .25s ease; }
+  .zd-body.pane-hidden { grid-template-columns: 56px var(--props-w, 240px) 0px 6px 1fr 36px; }
+  .zd-body.pane-hidden .zd-main { display: none; }
+
+  .zd-rail-left { background: var(--zd-rail-bg); border-right: 1px solid var(--zd-border); display: flex; flex-direction: column; align-items: center; padding-top: 14px; gap: 18px; }
+  .zd-rail-left i { font-size: 20px; color: #718096; cursor: pointer; }
+  .zd-rail-left i.active { color: var(--zd-text); }
+
+  .zd-properties { background: #fff; border-right: 1px solid var(--zd-border); overflow-y: auto; padding: 14px 14px 24px; }
+  .zd-prop-group { margin-bottom: 14px; }
+  .zd-prop-label { font-size: 12px; color: var(--zd-text); font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+  .zd-prop-label .req-star { color: #e53e3e; }
+  .zd-prop-label .take-it { margin-left: auto; color: #2b6cb0; font-size: 11px; cursor: pointer; font-weight: 500; }
+  .zd-prop-input { width: 100%; padding: 6px 8px; border: 1px solid var(--zd-border); border-radius: 4px; font-size: 12.5px; background: #fff; cursor: pointer; display: flex; align-items: center; gap: 6px; min-height: 30px; }
+  .zd-prop-input .av { width: 16px; height: 16px; border-radius: 50%; background: #fed7aa; flex-shrink: 0; }
+  .zd-prop-input .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--zd-text); }
+  .zd-prop-input .chev { color: var(--zd-muted); font-size: 11px; }
+  .zd-prop-tags { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px 8px; border: 1px solid var(--zd-border); border-radius: 4px; min-height: 30px; }
+  .zd-prop-tag { background: #edf2f7; padding: 1px 6px; border-radius: 3px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px; }
+  .zd-prop-tag .x { color: var(--zd-muted); cursor: pointer; }
+
+  .zd-main { background: #fff; overflow-y: auto; }
+  .zd-context-tabs { display: flex; gap: 18px; padding: 0 22px; border-bottom: 1px solid var(--zd-border); font-size: 13px; background: #fff; }
+  .zd-context-tab { padding: 10px 0; cursor: pointer; color: var(--zd-muted); border-bottom: 2px solid transparent; user-select: none; }
+  .zd-context-tab.active { color: var(--zd-text); border-bottom-color: #3182ce; font-weight: 500; }
+  .zd-context-tab .open-pill { background: #fed7d7; color: #c53030; padding: 1px 5px; border-radius: 2px; font-size: 10px; font-weight: 700; margin-right: 6px; }
+
+  .zd-ticket-header { padding: 16px 22px; display: flex; align-items: flex-start; gap: 12px; }
+  .zd-ticket-header .left { flex: 1; }
+  .zd-ticket-header h1 { font-size: 19px; margin: 0 0 4px; font-weight: 600; }
+  .zd-ticket-header .via { color: var(--zd-muted); font-size: 13px; }
+  .zd-ticket-header .zd-icons { display: flex; gap: 14px; color: #718096; font-size: 16px; align-items: center; }
+
+  .zd-conversation { padding: 0 22px 18px; }
+  .zd-attachment { background: #fef3c7; border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+  .zd-attachment .at-title { font-size: 13.5px; margin-bottom: 10px; }
+  .zd-attachment .at-file { background: #fff; border-radius: 6px; padding: 10px; width: 200px; display: flex; flex-direction: column; gap: 4px; }
+  .zd-attachment .at-file .at-thumb { width: 100%; height: 80px; background: #f1f5f9; border-radius: 4px; display: grid; place-items: center; color: var(--zd-muted); }
+  .zd-attachment .at-file .at-name { font-size: 12px; color: var(--zd-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .zd-attachment .at-file .at-type { font-size: 10px; color: var(--zd-muted); }
+
+  .zd-msg { margin-bottom: 16px; display: flex; gap: 12px; }
+  .zd-msg .msg-av { width: 32px; height: 32px; border-radius: 50%; background: #cbd5e0; flex-shrink: 0; display: grid; place-items: center; color: #fff; font-size: 14px; }
+  .zd-msg .msg-body { flex: 1; min-width: 0; }
+  .zd-msg .author { font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .zd-msg .author .internal-tag { background: #fed7aa; color: #92400e; font-size: 10px; padding: 1px 6px; border-radius: 2px; font-weight: 700; }
+  .zd-msg .when { color: var(--zd-muted); font-size: 12px; font-weight: 400; }
+  .zd-internal-note { background: #fef3c7; border-radius: 6px; padding: 12px 14px; margin-top: 8px; font-size: 13px; line-height: 1.6; }
+  .zd-internal-note ul { margin: 4px 0; padding-left: 22px; }
+  .zd-internal-note a { color: #2b6cb0; text-decoration: underline; }
+
+  .zd-reply { border-top: 1px solid var(--zd-border); padding: 12px 22px; background: #fff; }
+  .zd-reply-row { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--zd-text); }
+  .zd-reply-row .public-reply { display: flex; align-items: center; gap: 4px; cursor: pointer; font-weight: 500; }
+  .zd-reply-row .public-reply .chev { color: var(--zd-muted); font-size: 11px; }
+  .zd-reply-row .to-label { color: var(--zd-muted); }
+  .zd-reply-row .recipient { background: #f1f5f9; padding: 3px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; }
+  .zd-reply-row .recipient .av { width: 16px; height: 16px; border-radius: 50%; background: #fed7aa; }
+  .zd-reply-row .cc { color: #2b6cb0; cursor: pointer; margin-left: auto; }
+  .zd-reply-toolbar { display: flex; gap: 16px; padding-top: 10px; color: #718096; font-size: 16px; }
+  .zd-reply-toolbar i { cursor: pointer; }
+
+  .zd-separator { position: relative; background: var(--zd-border); cursor: ew-resize; user-select: none; transition: background .15s; }
+  .zd-separator:hover, .zd-separator.dragging { background: var(--blitzz); }
+  .zd-separator .sep-toggle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 22px; height: 44px; background: #fff; border: 1px solid var(--zd-border); border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,.1); color: var(--zd-muted); z-index: 10; }
+  .zd-separator .sep-toggle:hover { color: var(--blitzz); border-color: var(--blitzz); }
+
+  .zd-apps-panel { background: #fff; border-left: 1px solid var(--zd-border); display: flex; flex-direction: column; overflow: hidden; }
+  .zd-apps-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--zd-border); flex-shrink: 0; }
+  .zd-apps-header h3 { margin: 0; font-size: 16px; font-weight: 600; }
+  .zd-apps-header i { color: #4a5568; cursor: pointer; }
+  .zd-apps-scroll { flex: 1; overflow-y: auto; }
+
+  .app-card { border-bottom: 1px solid var(--zd-border); }
+  .app-card-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; user-select: none; }
+  .app-card-head:hover { background: #f8fafc; }
+  .app-card-head .app-logo { width: 24px; height: 24px; border-radius: 5px; display: grid; place-items: center; flex-shrink: 0; color: #fff; font-size: 11px; font-weight: 700; }
+  .app-card-head .app-logo.blitzz { background: linear-gradient(135deg, #4299e1, var(--blitzz)); }
+  .app-card-head .app-name { flex: 1; font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--zd-text); }
+  .app-card-head .app-pin { color: #718096; cursor: pointer; font-size: 14px; }
+  .app-card-head .app-chev { color: #718096; cursor: pointer; font-size: 14px; transition: transform .2s; }
+  .app-card.collapsed .app-card-head .app-chev { transform: rotate(-90deg); }
+  .app-card-body { border-top: 1px solid var(--zd-border); }
+  .app-card.collapsed .app-card-body { display: none; }
+
+  .add-app-row { padding: 10px 16px; border-bottom: 1px solid var(--zd-border); }
+  .add-app-btn { width: 28px; height: 28px; background: #fff; border: 1px solid var(--zd-border); border-radius: 4px; cursor: pointer; color: #4a5568; display: grid; place-items: center; }
+
+  .zd-rail-right { background: var(--zd-rail-bg); border-left: 1px solid var(--zd-border); display: flex; flex-direction: column; align-items: center; padding-top: 14px; gap: 14px; }
+  .zd-rail-right .rr-btn { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 4px; color: #4a5568; cursor: pointer; font-size: 16px; }
+  .zd-rail-right .rr-btn.active { background: #ebf5ff; color: var(--blitzz); }
+
+  /* Blitzz body — Option 5 */
+  .blitzz-body { padding: 0; }
+  .blitzz-tabs { display: flex; border-bottom: 1px solid var(--zd-border); background: #fafbfc; }
+  .blitzz-tab { flex: 1; text-align: center; padding: 10px 6px; font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; color: var(--zd-muted); user-select: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .blitzz-tab.active { color: var(--blitzz); border-bottom-color: var(--blitzz); background: #fff; }
+  .blitzz-tab:hover:not(.active) { background: #f1f3f5; }
+  .pad-14 { padding: 14px; }
+
+  .sub-pills { display: flex; gap: 8px; padding: 12px 14px 4px; }
+  .sub-pill { flex: 1; background: #fff; border: 1px solid var(--zd-border); border-radius: 999px; padding: 7px 10px; font-family: inherit; font-size: 12px; font-weight: 600; color: var(--zd-muted); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; user-select: none; transition: all .15s ease; }
+  .sub-pill:hover:not(.active) { border-color: #cbd5e0; color: var(--zd-text); }
+  .sub-pill.active { background: var(--pill-active-bg); border-color: var(--blitzz); color: var(--blitzz); }
+  .sub-pill i { font-size: 12px; }
+
+  .invite-tabs { display: flex; border: 1px solid var(--zd-border); border-radius: 6px; overflow: hidden; margin-bottom: 14px; }
+  .invite-tab { flex: 1; text-align: center; padding: 8px 4px; font-size: 12px; cursor: pointer; background: #fff; border-right: 1px solid var(--zd-border); }
+  .invite-tab:last-child { border-right: none; }
+  .invite-tab.active { background: var(--blitzz); color: #fff; }
+  .field-label { font-size: 12px; color: var(--zd-muted); margin-bottom: 4px; display: block; }
+
+  .cb-section-title { font-size: 11px; font-weight: 700; color: var(--zd-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 2px 0 8px; }
+  .otp-row { display: flex; gap: 6px; justify-content: center; margin-bottom: 6px; }
+  .otp-row input { width: 38px; height: 44px; text-align: center; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 18px; font-weight: 700; color: var(--zd-text); font-family: inherit; background: #fff; }
+  .otp-row input:focus { outline: none; border-color: var(--blitzz); box-shadow: 0 0 0 3px rgba(43,108,176,.15); }
+  .cb-or { text-align: center; color: #a0aec0; font-size: 11px; margin: 14px 0 10px; position: relative; }
+  .cb-or::before, .cb-or::after { content: ""; position: absolute; top: 50%; width: 35%; height: 1px; background: var(--zd-border); }
+  .cb-or::before { left: 0; }
+  .cb-or::after { right: 0; }
+  .device-card { border: 1px solid var(--zd-border); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; background: #fff; }
+  .device-card .dot { width: 8px; height: 8px; border-radius: 50%; background: #38a169; flex-shrink: 0; }
+  .device-card .info { flex: 1; min-width: 0; }
+  .device-card .name { font-size: 13px; font-weight: 600; color: var(--zd-text); }
+  .device-card .meta { font-size: 11px; color: var(--zd-muted); }
+  .device-card .connect { background: var(--blitzz); color: #fff; border: 0; border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+
+  .ch-list { padding: 14px; }
+  .ch-empty { text-align: center; color: var(--zd-muted); padding: 40px 12px; font-size: 13px; }
+  .ch-empty i { font-size: 28px; display: block; margin-bottom: 8px; opacity: .5; }
+  .session-card { border: 1px solid var(--zd-border); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; background: #fff; transition: all .15s ease; cursor: pointer; }
+  .session-card:hover { border-color: var(--blitzz); box-shadow: 0 1px 4px rgba(43,108,176,.08); }
+  .sc-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  .sc-title { font-weight: 700; font-size: 14px; color: var(--zd-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+  .sc-line { font-size: 13px; color: var(--zd-text); margin-bottom: 6px; }
+  .sc-footer { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: var(--zd-text); flex-wrap: wrap; }
+  .sc-line .lbl, .sc-footer .lbl { font-weight: 600; color: var(--zd-text); }
+
+  .list-view, .detail-view { display: none; }
+  .list-view.active { display: block; }
+  .detail-view.active { display: block; margin: 14px; border: 1px solid var(--zd-border); border-radius: 8px; background: #fff; overflow: hidden; }
+  .detail-header { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--zd-border); background: #fff; cursor: pointer; }
+  .detail-header:hover { background: #f8fafc; }
+  .detail-header .head-chev { color: var(--zd-muted); font-size: 14px; flex-shrink: 0; }
+  .detail-header .head-title { font-weight: 600; font-size: 13px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .detail-tabs { display: flex; border-bottom: 1px solid var(--zd-border); background: #fff; container-type: inline-size; container-name: tabbar; }
+  .detail-tab { padding: 10px 12px; font-size: 13px; cursor: pointer; border-bottom: 2px solid transparent; color: var(--zd-muted); flex-shrink: 0; white-space: nowrap; user-select: none; position: relative; }
+  .detail-tab:hover:not(.active) { color: var(--zd-text); background: #f8fafc; }
+  .detail-tab.active { color: var(--blitzz); border-bottom-color: var(--blitzz); font-weight: 600; }
+  .detail-tab.has-dropdown { display: flex; align-items: center; gap: 4px; }
+  .dropdown-menu-mock { position: absolute; top: 100%; right: 0; background: #fff; border: 1px solid var(--zd-border); border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,.1); min-width: 150px; z-index: 20; display: none; margin-top: 2px; }
+  .detail-tab.has-dropdown.open .dropdown-menu-mock { display: block; }
+  .dropdown-menu-mock .dd-item { padding: 8px 14px; font-size: 13px; color: var(--zd-text); cursor: pointer; text-align: left; }
+  .opt-tab { display: none; }
+  @container tabbar (min-width: 460px) { .opt-tab[data-tab="recordings"] { display: block; } .opt-dd[data-tab="recordings"] { display: none; } }
+  @container tabbar (min-width: 540px) { .opt-tab[data-tab="files"] { display: block; } .opt-dd[data-tab="files"] { display: none; } }
+  @container tabbar (min-width: 640px) { .opt-tab[data-tab="summary"] { display: block; } .opt-dd[data-tab="summary"] { display: none; } .detail-tab.has-dropdown { display: none; } }
+  .detail-body { padding: 14px; }
+  .detail-pane { display: none; }
+  .detail-pane.active { display: block; }
+  .detail-meta-row { display: flex; padding: 10px 0; border-bottom: 1px solid var(--zd-border); font-size: 13px; gap: 12px; }
+  .detail-meta-row:last-child { border-bottom: none; }
+  .detail-meta-label { color: var(--zd-muted); width: 100px; flex-shrink: 0; font-weight: 600; }
+  .detail-meta-value { flex: 1; color: var(--zd-text); min-width: 0; word-break: break-word; }
+  .empty-state { text-align: center; padding: 40px 14px; color: var(--zd-muted); }
+  .empty-state i { font-size: 32px; display: block; margin-bottom: 10px; opacity: .5; }
+  .loading-state { text-align: center; padding: 40px 14px; color: var(--zd-muted); font-size: 13px; }
+  .loading-state .spinner { width: 28px; height: 28px; border: 3px solid #e5e7eb; border-top-color: var(--blitzz); border-radius: 50%; margin: 0 auto 12px; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .mock-banner { background: linear-gradient(90deg, #fef3c7, #fde68a); color: #78350f; text-align: center; padding: 6px; font-size: 12px; font-weight: 500; }
+  .width-badge { font-size: 10px; color: var(--zd-muted); background: #f1f5f9; padding: 1px 6px; border-radius: 999px; font-family: ui-monospace, Consolas, monospace; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="mock-banner">
+  <i class="bi bi-eye"></i> <strong>Option 2 · Function → Mode</strong> — Sessions / History tabs at top, Video / Cobrowse pills inside each
+</div>
+
+<div class="zd-app">
+  <div class="zd-tour">
+    <i class="bi bi-info-circle"></i>
+    <span class="tour-strong">There's a new way to move around Zendesk</span>
+    <span class="tour-text">Check out our guided walkthrough of Zendesk's new navigation</span>
+    <a href="#">Learn more <i class="bi bi-box-arrow-up-right" style="font-size:11px;"></i></a>
+    <div class="spacer"></div>
+    <button class="tour-btn">Take a tour</button>
+    <button class="tour-close" aria-label="Dismiss">×</button>
+  </div>
+
+  <div class="zd-header">
+    <div class="z-logo">Z</div>
+    <div class="zd-product">Support <i class="bi bi-chevron-down" style="font-size:11px;"></i></div>
+    <div class="zd-tabs">
+      <div class="zd-tab"><i class="bi bi-headset"></i><span class="tab-label">Sample ticket: Meet the …</span><span class="tab-id">#1</span><i class="bi bi-x tab-close"></i></div>
+      <button class="zd-tab-add" aria-label="Add tab"><i class="bi bi-plus" style="font-size:14px;"></i></button>
+    </div>
+    <div class="zd-spacer"></div>
+    <div class="zd-actions">
+      <i class="bi bi-search ic-btn"></i><span class="convs">Conversations <span class="num">0</span></span>
+      <i class="bi bi-chat-text ic-btn"></i><i class="bi bi-telephone ic-btn"></i><i class="bi bi-bell ic-btn"></i>
+      <i class="bi bi-rocket-takeoff ic-btn" style="color:#3182ce;"></i><i class="bi bi-question-circle ic-btn"></i><i class="bi bi-person-circle ic-btn"></i>
+    </div>
+  </div>
+
+  <div class="zd-body" id="zdBody" style="--props-w: 240px; --panel-w: 360px;">
+    <div class="zd-rail-left"><i class="bi bi-house-door active"></i><i class="bi bi-headset"></i><i class="bi bi-people"></i><i class="bi bi-building"></i></div>
+
+    <div class="zd-properties">
+      <div class="zd-prop-group"><div class="zd-prop-label">Requester</div><div class="zd-prop-input"><span class="av"></span><span class="name">Sample customer</span><i class="bi bi-chevron-down chev"></i></div></div>
+      <div class="zd-prop-group"><div class="zd-prop-label">Assignee<span class="req-star">*</span><span class="take-it">take it</span></div><div class="zd-prop-input"><span class="av" style="background:#fbb6ce;"></span><span class="name">Support/Keyur Patel</span><i class="bi bi-chevron-down chev"></i></div></div>
+      <div class="zd-prop-group"><div class="zd-prop-label">Tags</div><div class="zd-prop-tags"><span class="zd-prop-tag">sample <span class="x">×</span></span></div></div>
+      <div class="zd-prop-group"><div class="zd-prop-label">Priority</div><div class="zd-prop-input"><span class="name">Normal</span><i class="bi bi-chevron-down chev"></i></div></div>
+    </div>
+
+    <div class="zd-main">
+      <div class="zd-context-tabs">
+        <div class="zd-context-tab">Example (create)</div>
+        <div class="zd-context-tab">Sample customer</div>
+        <div class="zd-context-tab active"><span class="open-pill">OPEN</span>Incident #1</div>
+      </div>
+      <div class="zd-ticket-header">
+        <div class="left"><h1>Sample ticket: Meet the ticket</h1><div class="via">Via sample ticket</div></div>
+        <div class="zd-icons"><i class="bi bi-funnel"></i><i class="bi bi-clock-history"></i><i class="bi bi-three-dots-vertical"></i></div>
+      </div>
+      <div class="zd-conversation">
+        <div class="zd-attachment"><div class="at-title">An image has been saved</div><div class="at-file"><div class="at-thumb"><i class="bi bi-image" style="font-size:24px;"></i></div><div class="at-name">devblitzzco_Patel_1_…</div><div class="at-type">JPEG</div></div></div>
+        <div class="zd-msg"><div class="msg-av">K</div><div class="msg-body"><div class="author">Keyur Patel <span class="internal-tag">Internal</span><span class="when">· Feb 09 19:54</span></div><div class="zd-internal-note">Video Session ID: 202-476-670<br/>Start Time(UTC): Feb 10, 2026 03:54 AM<br/>Duration(mm:ss): 00:31</div></div></div>
+      </div>
+      <div class="zd-reply">
+        <div class="zd-reply-row">
+          <span class="public-reply"><i class="bi bi-reply"></i> Public reply <i class="bi bi-chevron-down chev"></i></span>
+          <span class="to-label">To</span>
+          <span class="recipient"><span class="av"></span> Sample customer <i class="bi bi-pencil"></i></span>
+          <span class="cc">cc</span>
+        </div>
+        <div class="zd-reply-toolbar"><i class="bi bi-eraser"></i><i class="bi bi-type"></i><i class="bi bi-emoji-smile"></i><i class="bi bi-paperclip"></i><i class="bi bi-link-45deg"></i></div>
+      </div>
+    </div>
+
+    <div class="zd-separator" id="separator">
+      <div class="sep-toggle" id="sepToggle"><i class="bi bi-chevron-left" id="sepChevron"></i></div>
+    </div>
+
+    <div class="zd-apps-panel">
+      <div class="zd-apps-header"><h3>Apps</h3><i class="bi bi-arrow-clockwise"></i></div>
+      <div class="zd-apps-scroll">
+        <div class="app-card" id="blitzzCard">
+          <div class="app-card-head" onclick="this.parentElement.classList.toggle('collapsed')">
+            <div class="app-logo blitzz">B</div>
+            <div class="app-name">Blitzz</div>
+            <span class="width-badge" id="widthBadge">360px</span>
+            <i class="bi bi-pin-angle app-pin"></i>
+            <i class="bi bi-chevron-down app-chev"></i>
+          </div>
+          <div class="app-card-body">
+            <div class="blitzz-body">
+              <!-- Top tabs: Sessions / History -->
+              <div class="blitzz-tabs">
+                <div class="blitzz-tab active" data-fn="sessions" onclick="switchFn('sessions', this)">
+                  <i class="bi bi-play-circle"></i> Sessions
+                </div>
+                <div class="blitzz-tab" data-fn="history" onclick="switchFn('history', this)">
+                  <i class="bi bi-clock-history"></i> History
+                </div>
+              </div>
+
+              <!-- Sub-pills: Video / Cobrowse — shared across both top tabs -->
+              <div class="sub-pills">
+                <div class="sub-pill active" data-mode="video" onclick="switchMode('video', this)"><i class="bi bi-camera-video"></i> Video Support</div>
+                <div class="sub-pill" data-mode="cobrowse" onclick="switchMode('cobrowse', this)"><i class="bi bi-display"></i> Cobrowse</div>
+              </div>
+
+              <!-- Sessions panes -->
+              <div id="pane-sessions-video" class="pad-14">
+                <div class="mb-2"><label class="field-label" for="team-5">Team</label><select id="team-5" class="form-select form-select-sm"><option>Support · Tier 1</option></select></div>
+                <div class="invite-tabs"><div class="invite-tab active">SMS</div><div class="invite-tab">WhatsApp</div><div class="invite-tab">Email</div><div class="invite-tab">URL</div></div>
+                <div class="mb-2"><label class="field-label" for="phone-5">Phone number</label><input id="phone-5" class="form-control form-control-sm" placeholder="+1 (555) 555-5555" /></div>
+                <div class="mb-3"><label class="field-label" for="msg-5">Message</label><textarea id="msg-5" class="form-control form-control-sm" rows="3">Hi, please join the video session: {{link}}</textarea></div>
+                <button type="button" class="btn btn-primary btn-sm w-100" style="background:var(--blitzz); border-color:var(--blitzz);"><i class="bi bi-send"></i> Invite &amp; Join</button>
+              </div>
+
+              <div id="pane-sessions-cobrowse" class="pad-14 hidden">
+                <div class="cb-section-title">Enter 6-digit code</div>
+                <div class="otp-row">
+                  <input maxlength="1" value="3" /><input maxlength="1" value="9" /><input maxlength="1" value="2" />
+                  <input maxlength="1" value="4" /><input maxlength="1" value="1" /><input maxlength="1" value="7" />
+                </div>
+                <div class="cb-or">or</div>
+                <div class="cb-section-title">Live devices · 2</div>
+                <div class="device-card"><span class="dot"></span><div class="info"><div class="name">iPhone 14 · Safari</div><div class="meta">Ref #VX-2210 · 2 min ago</div></div><button class="connect">Connect</button></div>
+                <div class="device-card"><span class="dot"></span><div class="info"><div class="name">Windows · Chrome</div><div class="meta">Ref #VX-2211 · just now</div></div><button class="connect">Connect</button></div>
+              </div>
+
+              <!-- History panes -->
+              <div id="pane-history-video" class="hidden">
+                <div class="list-view active" id="videoListView"><div class="ch-list" id="videoSessionList"></div></div>
+                <div class="detail-view" id="videoDetailView">
+                  <div class="detail-header" onclick="backToList('video')"><i class="bi bi-arrow-left head-chev"></i><div class="head-title" id="videoDetailHeadTitle">Session</div></div>
+                  <div class="detail-tabs">
+                    <div class="detail-tab active" data-tab="details" onclick="switchDetailTab('video', this, 'details')">Details</div>
+                    <div class="detail-tab" data-tab="images" onclick="switchDetailTab('video', this, 'images')">Images (0)</div>
+                    <div class="detail-tab" data-tab="notes" onclick="switchDetailTab('video', this, 'notes')">Notes (0)</div>
+                    <div class="detail-tab opt-tab" data-tab="recordings" onclick="switchDetailTab('video', this, 'recordings')">Recordings (0)</div>
+                    <div class="detail-tab opt-tab" data-tab="files" onclick="switchDetailTab('video', this, 'files')">Files (0)</div>
+                    <div class="detail-tab opt-tab" data-tab="summary" onclick="switchDetailTab('video', this, 'summary')">AI Summary (0)</div>
+                    <div class="detail-tab has-dropdown" onclick="toggleMoreMenu(event, this)">More <i class="bi bi-chevron-down" style="font-size:11px;"></i><div class="dropdown-menu-mock"><div class="dd-item opt-dd" data-tab="recordings" onclick="switchDetailTab('video', this, 'recordings'); event.stopPropagation();">Recordings (0)</div><div class="dd-item opt-dd" data-tab="files" onclick="switchDetailTab('video', this, 'files'); event.stopPropagation();">Files (0)</div><div class="dd-item opt-dd" data-tab="summary" onclick="switchDetailTab('video', this, 'summary'); event.stopPropagation();">AI Summary (0)</div></div></div>
+                  </div>
+                  <div class="detail-body"><div class="detail-pane active" data-pane="details"></div><div class="detail-pane" data-pane="notes"></div><div class="detail-pane" data-pane="images"></div><div class="detail-pane" data-pane="recordings"></div><div class="detail-pane" data-pane="files"></div><div class="detail-pane" data-pane="summary"></div></div>
+                </div>
+              </div>
+
+              <div id="pane-history-cobrowse" class="hidden">
+                <div class="list-view active" id="cobrowseListView"><div class="ch-list" id="cobrowseSessionList"></div></div>
+                <div class="detail-view" id="cobrowseDetailView">
+                  <div class="detail-header" onclick="backToList('cobrowse')"><i class="bi bi-arrow-left head-chev"></i><div class="head-title" id="cobrowseDetailHeadTitle">Session</div></div>
+                  <div class="detail-tabs">
+                    <div class="detail-tab active" data-tab="details" onclick="switchDetailTab('cobrowse', this, 'details')">Details</div>
+                    <div class="detail-tab" data-tab="notes" onclick="switchDetailTab('cobrowse', this, 'notes')">Notes (0)</div>
+                    <div class="detail-tab opt-tab" data-tab="recordings" onclick="switchDetailTab('cobrowse', this, 'recordings')">Recordings (0)</div>
+                    <div class="detail-tab has-dropdown" onclick="toggleMoreMenu(event, this)">More <i class="bi bi-chevron-down" style="font-size:11px;"></i><div class="dropdown-menu-mock"><div class="dd-item opt-dd" data-tab="recordings" onclick="switchDetailTab('cobrowse', this, 'recordings'); event.stopPropagation();">Recordings (0)</div></div></div>
+                  </div>
+                  <div class="detail-body"><div class="detail-pane active" data-pane="details"></div><div class="detail-pane" data-pane="notes"></div><div class="detail-pane" data-pane="recordings"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="add-app-row">
+          <button class="add-app-btn" aria-label="Add app"><i class="bi bi-plus" style="font-size:14px;"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="zd-rail-right">
+      <div class="rr-btn"><i class="bi bi-person"></i></div>
+      <div class="rr-btn active"><i class="bi bi-grid-3x3-gap-fill"></i></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const sep = document.getElementById('separator');
+  const body = document.getElementById('zdBody');
+  const widthBadge = document.getElementById('widthBadge');
+  const sepToggle = document.getElementById('sepToggle');
+  const sepChevron = document.getElementById('sepChevron');
+  let dragging = false;
+  sep.addEventListener('mousedown', (e) => { if (e.target.closest('.sep-toggle')) return; dragging = true; sep.classList.add('dragging'); document.body.style.cursor = 'ew-resize'; e.preventDefault(); });
+  document.addEventListener('mousemove', (e) => { if (!dragging) return; const w = window.innerWidth - e.clientX - 36; body.style.setProperty('--panel-w', Math.max(280, Math.min(window.innerWidth - 400, w)) + 'px'); updateBadge(); });
+  document.addEventListener('mouseup', () => { if (dragging) { dragging = false; sep.classList.remove('dragging'); document.body.style.cursor = ''; } });
+  sepToggle.addEventListener('click', () => { const hidden = body.classList.toggle('pane-hidden'); sepChevron.className = hidden ? 'bi bi-chevron-right' : 'bi bi-chevron-left'; setTimeout(updateBadge, 280); });
+  function updateBadge(){ const card = document.getElementById('blitzzCard'); if (card) widthBadge.textContent = Math.round(card.getBoundingClientRect().width) + 'px'; }
+  window.addEventListener('resize', updateBadge);
+
+  const videoSessions = [
+    { title: 'Fdfff',             code: '204-845-720', duration: 'Not started', created: 'May 06, 2026 04:25 PM', startTime: 'May 06, 2026 04:25 PM', inviteType: 'SMS' },
+    { title: 'TESTCALL_123456',   code: '204-626-357', duration: 'Not started', created: 'May 06, 2026 02:11 PM', startTime: 'May 06, 2026 02:11 PM', inviteType: 'Email' },
+    { title: 'TEST_CALL_123456',  code: '204-875-696', duration: '02:30',       created: 'Apr 13, 2026 09:14 AM', startTime: 'Apr 13, 2026 09:14 AM', inviteType: 'URL' },
+    { title: 'Customer Demo',     code: '204-552-018', duration: '12:45',       created: 'Apr 07, 2026 10:02 AM', startTime: 'Apr 07, 2026 10:02 AM', inviteType: 'Email' },
+    { title: 'Onboarding session',code: '204-441-776', duration: '08:21',       created: 'Apr 02, 2026 05:30 PM', startTime: 'Apr 02, 2026 05:30 PM', inviteType: 'WhatsApp' },
+  ];
+  const cobrowseSessions = [
+    { title: 'iPhone 14 · Safari',  sessionId: 'CB-204-2210', duration: '08:14', created: 'May 05, 2026 03:45 PM', startTime: 'May 05, 2026 03:45 PM', device: 'iPhone 14', browser: 'Safari 17.4' },
+    { title: 'Windows · Chrome',    sessionId: 'CB-204-2189', duration: '15:32', created: 'May 04, 2026 11:18 AM', startTime: 'May 04, 2026 11:18 AM', device: 'Windows 11', browser: 'Chrome 124' },
+    { title: 'macOS · Firefox',     sessionId: 'CB-204-2150', duration: '04:22', created: 'May 02, 2026 09:30 AM', startTime: 'May 02, 2026 09:30 AM', device: 'macOS 14.4', browser: 'Firefox 125' },
+  ];
+
+  let currentFn = 'sessions';
+  let currentMode = 'video';
+
+  function applyPane(){
+    ['pane-sessions-video','pane-sessions-cobrowse','pane-history-video','pane-history-cobrowse']
+      .forEach(id => document.getElementById(id).classList.add('hidden'));
+    document.getElementById(`pane-${currentFn}-${currentMode}`).classList.remove('hidden');
+    if (currentFn === 'history') { backToList(currentMode); renderHistory(currentMode); }
+  }
+  function switchFn(fn, el){ document.querySelectorAll('.blitzz-tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); currentFn = fn; applyPane(); }
+  function switchMode(mode, el){ document.querySelectorAll('.sub-pill').forEach(t => t.classList.remove('active')); el.classList.add('active'); currentMode = mode; applyPane(); }
+
+  function renderHistory(mode){
+    const data = mode === 'video' ? videoSessions : cobrowseSessions;
+    const list = document.getElementById(mode === 'video' ? 'videoSessionList' : 'cobrowseSessionList');
+    if (!data.length) { list.innerHTML = `<div class="ch-empty"><i class="bi bi-camera-video-off"></i>No sessions yet.</div>`; return; }
+    list.innerHTML = data.map((s, i) => mode === 'video' ? `
+      <div class="session-card" onclick="showSessionDetail('video', ${i})">
+        <div class="sc-header"><span class="sc-title" title="${s.title}">${s.title}</span></div>
+        <div class="sc-line"><span class="lbl">Code:</span> ${s.code}</div>
+        <div class="sc-footer"><div><span class="lbl">Duration:</span> ${s.duration}</div><div><span class="lbl">Created:</span> ${fd(s.created)}</div></div>
+      </div>` : `
+      <div class="session-card" onclick="showSessionDetail('cobrowse', ${i})">
+        <div class="sc-header"><span class="sc-title" title="${s.title}">${s.title}</span></div>
+        <div class="sc-line"><span class="lbl">Session:</span> ${s.sessionId}</div>
+        <div class="sc-footer"><div><span class="lbl">Duration:</span> ${s.duration}</div><div><span class="lbl">Created:</span> ${fd(s.created)}</div></div>
+      </div>`).join('');
+  }
+  function fd(d){ return d.split(' ').slice(0,3).join(' ').replace(/,$/, ''); }
+
+  const _details = { video: '', cobrowse: '' };
+  const PANE_CONTENT = {
+    notes:      `<div class="empty-state"><i class="bi bi-journal-text"></i><div>No notes added.</div></div>`,
+    images:     `<div class="empty-state"><i class="bi bi-image"></i><div>No images uploaded.</div></div>`,
+    recordings: `<div class="empty-state"><i class="bi bi-camera-reels"></i><div>No recordings available.</div></div>`,
+    files:      `<div class="empty-state"><i class="bi bi-file-earmark"></i><div>No files attached.</div></div>`,
+    summary:    `<div class="empty-state"><i class="bi bi-stars"></i><div>AI summary not available yet.</div></div>`,
+  };
+  function getPaneContent(mode, name){ return name === 'details' ? _details[mode] : (PANE_CONTENT[name] || ''); }
+  function loadPane(mode, name){
+    const wrap = mode === 'video' ? document.getElementById('videoDetailView') : document.getElementById('cobrowseDetailView');
+    const pane = wrap.querySelector(`.detail-pane[data-pane="${name}"]`);
+    if (!pane) return;
+    pane.innerHTML = `<div class="loading-state"><div class="spinner"></div><div>Loading…</div></div>`;
+    setTimeout(() => { pane.innerHTML = getPaneContent(mode, name); }, 700);
+  }
+  function showSessionDetail(mode, i){
+    const s = (mode === 'video' ? videoSessions : cobrowseSessions)[i];
+    const listEl = mode === 'video' ? 'videoListView' : 'cobrowseListView';
+    const detailEl = mode === 'video' ? 'videoDetailView' : 'cobrowseDetailView';
+    const titleEl = mode === 'video' ? 'videoDetailHeadTitle' : 'cobrowseDetailHeadTitle';
+    document.getElementById(listEl).classList.remove('active');
+    document.getElementById(detailEl).classList.add('active');
+    const tag = mode === 'video' ? s.code : s.sessionId;
+    document.getElementById(titleEl).textContent = `${s.title} — ${tag} — ${s.created}`;
+    const detailWrap = document.getElementById(detailEl);
+    detailWrap.querySelectorAll('.detail-tab, .dd-item').forEach(t => t.classList.remove('active'));
+    detailWrap.querySelector('.detail-tab[data-tab="details"]').classList.add('active');
+    detailWrap.querySelectorAll('.detail-pane').forEach(p => p.classList.remove('active'));
+    detailWrap.querySelector('.detail-pane[data-pane="details"]').classList.add('active');
+    _details[mode] = mode === 'video' ? `
+      <div class="detail-meta-row"><div class="detail-meta-label">Title</div><div class="detail-meta-value">${s.title}</div></div>
+      <div class="detail-meta-row"><div class="detail-meta-label">Code</div><div class="detail-meta-value">${s.code}</div></div>
+      <div class="detail-meta-row"><div class="detail-meta-label">Invite type</div><div class="detail-meta-value">${s.inviteType}</div></div>
+      <div class="detail-meta-row"><div class="detail-meta-label">Duration</div><div class="detail-meta-value">${s.duration}</div></div>
+      <div class="detail-meta-row"><div class="detail-meta-label">Created</div><div class="detail-meta-value">${s.created}</div></div>` : `
+      <div class="detail-meta-row"><div class="detail-meta-label">Title</div><div class="detail-meta-value">${s.title}</div></div>
+      <div class="detail-meta-row"><div class="detail-meta-label">Session ID</div><div class="detail-meta-value">${s.sessionId}</div></div>
+      <div class="detail-meta-row"><div class="detail-meta-label">Device</div><div class="detail-meta-value">${s.device}</div></div>
+      <div class="detail-meta-row"><div class="detail-meta-label">Browser</div><div class="detail-meta-value">${s.browser}</div></div>
+      <div class="detail-meta-row"><div class="detail-meta-label">Duration</div><div class="detail-meta-value">${s.duration}</div></div>
+      <div class="detail-meta-row"><div class="detail-meta-label">Created</div><div class="detail-meta-value">${s.created}</div></div>`;
+    loadPane(mode, 'details');
+  }
+  function backToList(mode){
+    const listEl = mode === 'video' ? 'videoListView' : 'cobrowseListView';
+    const detailEl = mode === 'video' ? 'videoDetailView' : 'cobrowseDetailView';
+    document.getElementById(detailEl).classList.remove('active');
+    document.getElementById(listEl).classList.add('active');
+    document.querySelectorAll('.detail-tab.has-dropdown').forEach(d => d.classList.remove('open'));
+  }
+  function switchDetailTab(mode, el, paneName){
+    const wrap = mode === 'video' ? document.getElementById('videoDetailView') : document.getElementById('cobrowseDetailView');
+    wrap.querySelectorAll('.detail-tab, .dd-item').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    wrap.querySelectorAll('.detail-pane').forEach(p => p.classList.remove('active'));
+    const pane = wrap.querySelector(`.detail-pane[data-pane="${paneName}"]`);
+    if (pane) pane.classList.add('active');
+    wrap.querySelectorAll('.detail-tab.has-dropdown').forEach(d => d.classList.remove('open'));
+    loadPane(mode, paneName);
+  }
+  function toggleMoreMenu(e, el){ e.stopPropagation(); el.classList.toggle('open'); }
+  document.addEventListener('click', () => document.querySelectorAll('.detail-tab.has-dropdown').forEach(d => d.classList.remove('open')));
+
+  updateBadge();
+</script>
+</body>
+</html>

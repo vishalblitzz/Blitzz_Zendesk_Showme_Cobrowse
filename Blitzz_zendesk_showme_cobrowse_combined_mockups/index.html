@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Blitzz · Unified Zendesk App — Design Options</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+<style>
+  :root { --blitzz: #2b6cb0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: linear-gradient(180deg, #f7fafc 0%, #eef0f3 100%); margin: 0; padding: 40px 20px; min-height: 100vh; color: #2d3748; }
+  .wrap { max-width: 1280px; margin: 0 auto; }
+  .header { text-align: center; margin-bottom: 36px; }
+  .header .logo { width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, #4299e1, var(--blitzz)); color: #fff; font-weight: 700; font-size: 26px; display: grid; place-items: center; margin: 0 auto 14px; box-shadow: 0 4px 14px rgba(43,108,176,.3); }
+  .header h1 { font-size: 28px; margin: 0 0 8px; font-weight: 700; }
+  .header p { color: #718096; font-size: 15px; max-width: 760px; margin: 0 auto; }
+
+  .feature-card { background: #fff; border-radius: 12px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.04); margin-bottom: 18px; display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .feature-card .req-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .feature-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; color: #4a5568; }
+  .feature-item i { color: var(--blitzz); font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+
+  .section-title { margin: 28px 0 14px; font-size: 16px; font-weight: 600; color: #4a5568; text-transform: uppercase; letter-spacing: .5px; display: flex; align-items: center; gap: 10px; }
+  .section-title::before, .section-title::after { content: ""; flex: 1; height: 1px; background: #e2e8f0; }
+
+  .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .option-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 4px 14px rgba(0,0,0,.04); transition: transform .15s ease, box-shadow .15s ease; display: flex; flex-direction: column; }
+  .option-card:hover { transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,.08), 0 10px 24px rgba(0,0,0,.06); }
+  .option-card.recommended { border: 2px solid #22863a; }
+  .option-thumb { height: 180px; background: #f7fafc; display: grid; place-items: center; border-bottom: 1px solid #edf2f7; position: relative; overflow: hidden; }
+  .option-thumb svg { width: 92%; max-height: 92%; }
+  .option-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+  .option-tag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--blitzz); background: #ebf8ff; padding: 3px 8px; border-radius: 4px; letter-spacing: .5px; margin-bottom: 10px; align-self: flex-start; }
+  .option-tag.recommended { background: #f0fff4; color: #22863a; }
+  .option-card h3 { margin: 0 0 8px; font-size: 17px; font-weight: 600; }
+  .option-card p { color: #718096; font-size: 13px; line-height: 1.5; margin: 0 0 12px; }
+  .pros-cons { font-size: 12.5px; }
+  .pros-cons .row-line { display: flex; gap: 6px; margin-bottom: 4px; align-items: flex-start; }
+  .pros-cons .ic { width: 16px; flex-shrink: 0; }
+  .pros-cons .ic.ok { color: #38a169; }
+  .pros-cons .ic.no { color: #e53e3e; }
+  .option-card .open-btn { margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--blitzz); color: #fff; padding: 9px 14px; border-radius: 6px; text-decoration: none; font-size: 13.5px; font-weight: 500; transition: background .15s; }
+  .option-card .open-btn:hover { background: #1e4e8c; color: #fff; }
+
+  .footer-note { margin-top: 32px; text-align: center; color: #718096; font-size: 13px; padding-top: 18px; border-top: 1px solid #e2e8f0; }
+  .footer-note strong { color: #2d3748; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="header">
+      <div class="logo">B</div>
+      <h1>Blitzz · Unified Zendesk App — Design Options</h1>
+      <p>Four clickable prototypes for merging the ShowMe (Video Support) and Cobrowse Zendesk apps into a single unified app. All options support <strong>both Video and Cobrowse session history</strong>, each fetched from its own API with no client-side merging. Ordered from most to least recommended.</p>
+    </div>
+
+    <div class="feature-card">
+      <div>
+        <h5 style="margin:0 0 4px; font-size: 14px; color:#2d3748;"><i class="bi bi-list-check"></i> Common ground across all options</h5>
+        <div style="font-size:13px; color:#718096;">Same Zendesk sidebar shell (~360px). Single unified Blitzz card replaces today's two separate apps. Video and Cobrowse histories fetched separately — they never need to merge.</div>
+      </div>
+      <div class="req-row">
+        <div class="feature-item"><i class="bi bi-camera-video"></i> Video Support — current invite flow (SMS / WhatsApp / Email / URL)</div>
+        <div class="feature-item"><i class="bi bi-display"></i> Cobrowse — 6-digit code entry + live device list</div>
+        <div class="feature-item"><i class="bi bi-clock-history"></i> History per mode — list + tabbed detail (Details / Images / Notes / Recordings / Files / AI Summary)</div>
+        <div class="feature-item"><i class="bi bi-app-indicator"></i> One unified app — Cobrowse no longer a separate Zendesk card</div>
+      </div>
+    </div>
+
+    <div class="section-title">Options 1 → 4 (recommended first)</div>
+
+    <div class="options">
+
+      <!-- ============ Option 1 — Recommended ============ -->
+      <div class="option-card recommended">
+        <div class="option-thumb">
+          <svg viewBox="0 0 280 170" xmlns="http://www.w3.org/2000/svg">
+            <rect width="280" height="170" fill="#fafbfc"/>
+            <rect x="80" y="14" width="180" height="140" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="80" y="14" width="180" height="14" fill="#fff" stroke="#e5e7eb"/>
+            <text x="170" y="24" fill="#2d3748" font-size="8" text-anchor="middle" font-weight="600">Blitzz · fixed header</text>
+            <rect x="80" y="28" width="90" height="18" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="170" y="28" width="90" height="18" fill="#fafbfc" stroke="#e5e7eb"/>
+            <rect x="80" y="44" width="90" height="2" fill="#2b6cb0"/>
+            <text x="125" y="40" fill="#2b6cb0" font-size="9" text-anchor="middle" font-weight="600">📹 Video</text>
+            <text x="215" y="40" fill="#68737d" font-size="9" text-anchor="middle">🖥 Cobrowse</text>
+            <rect x="86" y="54" width="80" height="16" rx="999" fill="#ebf3fc" stroke="#2b6cb0"/>
+            <text x="126" y="64" fill="#2b6cb0" font-size="8" text-anchor="middle" font-weight="600">▶ Sessions</text>
+            <rect x="172" y="54" width="80" height="16" rx="999" fill="#fff" stroke="#e5e7eb"/>
+            <text x="212" y="64" fill="#68737d" font-size="8" text-anchor="middle">🕘 History</text>
+            <rect x="86" y="78" width="166" height="18" rx="3" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="86" y="100" width="166" height="22" rx="4" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="86" y="126" width="166" height="22" rx="4" fill="#fff" stroke="#e5e7eb"/>
+          </svg>
+        </div>
+        <div class="option-body">
+          <span class="option-tag recommended">★ OPTION 1 · RECOMMENDED</span>
+          <h3>Mode → Function</h3>
+          <p>Top tabs are <strong>Video Support</strong> / <strong>Cobrowse</strong>. Inside each mode, <strong>Sessions</strong> / <strong>History</strong> pills. Each mode owns its complete journey.</p>
+          <div class="pros-cons">
+            <div class="row-line"><span class="ic ok"><i class="bi bi-check-circle-fill"></i></span> Each mode self-contained — start + review together</div>
+            <div class="row-line"><span class="ic ok"><i class="bi bi-check-circle-fill"></i></span> Different APIs cleanly separated; no merging</div>
+            <div class="row-line"><span class="ic ok"><i class="bi bi-check-circle-fill"></i></span> Cobrowse reads as a peer product, not a sub-feature</div>
+            <div class="row-line"><span class="ic no"><i class="bi bi-x-circle-fill"></i></span> Cross-mode history comparison takes 2 clicks</div>
+          </div>
+          <a class="open-btn" href="option-1-mode-function.html" target="_blank"><i class="bi bi-eye"></i> Open prototype</a>
+        </div>
+      </div>
+
+      <!-- ============ Option 2 ============ -->
+      <div class="option-card">
+        <div class="option-thumb">
+          <svg viewBox="0 0 280 170" xmlns="http://www.w3.org/2000/svg">
+            <rect width="280" height="170" fill="#fafbfc"/>
+            <rect x="80" y="14" width="180" height="140" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="80" y="14" width="180" height="14" fill="#fff" stroke="#e5e7eb"/>
+            <text x="170" y="24" fill="#2d3748" font-size="8" text-anchor="middle" font-weight="600">Blitzz · fixed header</text>
+            <rect x="80" y="28" width="90" height="18" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="170" y="28" width="90" height="18" fill="#fafbfc" stroke="#e5e7eb"/>
+            <rect x="80" y="44" width="90" height="2" fill="#2b6cb0"/>
+            <text x="125" y="40" fill="#2b6cb0" font-size="9" text-anchor="middle" font-weight="600">▶ Sessions</text>
+            <text x="215" y="40" fill="#68737d" font-size="9" text-anchor="middle">🕘 History</text>
+            <rect x="86" y="54" width="80" height="16" rx="999" fill="#ebf3fc" stroke="#2b6cb0"/>
+            <text x="126" y="64" fill="#2b6cb0" font-size="8" text-anchor="middle" font-weight="600">📹 Video</text>
+            <rect x="172" y="54" width="80" height="16" rx="999" fill="#fff" stroke="#e5e7eb"/>
+            <text x="212" y="64" fill="#68737d" font-size="8" text-anchor="middle">🖥 Cobrowse</text>
+            <rect x="86" y="78" width="166" height="22" rx="4" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="86" y="104" width="166" height="22" rx="4" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="86" y="130" width="166" height="22" rx="4" fill="#fff" stroke="#e5e7eb"/>
+          </svg>
+        </div>
+        <div class="option-body">
+          <span class="option-tag">★ OPTION 2</span>
+          <h3>Function → Mode</h3>
+          <p>Top tabs are <strong>Sessions</strong> / <strong>History</strong>. Inside each, <strong>Video</strong> / <strong>Cobrowse</strong> pills. Cross-mode history is one click.</p>
+          <div class="pros-cons">
+            <div class="row-line"><span class="ic ok"><i class="bi bi-check-circle-fill"></i></span> Cross-mode comparison is one click</div>
+            <div class="row-line"><span class="ic ok"><i class="bi bi-check-circle-fill"></i></span> "Where's my history?" stays a 1-tap answer</div>
+            <div class="row-line"><span class="ic no"><i class="bi bi-x-circle-fill"></i></span> Cobrowse feels like Video's sub-mode</div>
+          </div>
+          <a class="open-btn" href="option-2-function-mode.html" target="_blank"><i class="bi bi-eye"></i> Open prototype</a>
+        </div>
+      </div>
+
+      <!-- ============ Option 3 ============ -->
+      <div class="option-card">
+        <div class="option-thumb">
+          <svg viewBox="0 0 280 170" xmlns="http://www.w3.org/2000/svg">
+            <rect width="280" height="170" fill="#fafbfc"/>
+            <rect x="80" y="14" width="180" height="140" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="80" y="14" width="180" height="14" fill="#fff" stroke="#e5e7eb"/>
+            <text x="170" y="24" fill="#2d3748" font-size="8" text-anchor="middle" font-weight="600">Blitzz · fixed header</text>
+            <rect x="80" y="28" width="90" height="18" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="170" y="28" width="90" height="18" fill="#fafbfc" stroke="#e5e7eb"/>
+            <rect x="80" y="44" width="90" height="2" fill="#2b6cb0"/>
+            <text x="125" y="40" fill="#2b6cb0" font-size="9" text-anchor="middle" font-weight="600">▶ Start Session</text>
+            <text x="215" y="40" fill="#68737d" font-size="9" text-anchor="middle">🕘 History</text>
+            <text x="86" y="58" fill="#2d3748" font-size="8" font-weight="600">How would you like to start?</text>
+            <rect x="86" y="62" width="166" height="38" rx="6" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="92" y="68" width="22" height="22" rx="4" fill="#ebf3fc"/>
+            <text x="103" y="83" fill="#2b6cb0" font-size="11" text-anchor="middle">📹</text>
+            <text x="120" y="78" fill="#2d3748" font-size="9" font-weight="700">Video Support</text>
+            <text x="120" y="90" fill="#68737d" font-size="7">SMS, WhatsApp, Email, URL</text>
+            <rect x="86" y="106" width="166" height="38" rx="6" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="92" y="112" width="22" height="22" rx="4" fill="#ebf3fc"/>
+            <text x="103" y="127" fill="#2b6cb0" font-size="11" text-anchor="middle">🖥</text>
+            <text x="120" y="122" fill="#2d3748" font-size="9" font-weight="700">Cobrowse</text>
+            <text x="120" y="134" fill="#68737d" font-size="7">Live device or 6-digit code</text>
+          </svg>
+        </div>
+        <div class="option-body">
+          <span class="option-tag">★ OPTION 3</span>
+          <h3>Action-card launcher</h3>
+          <p>Start Session tab shows two large action cards. Click to drill into the form. History tab gets internal Video / Cobrowse pills for dual history.</p>
+          <div class="pros-cons">
+            <div class="row-line"><span class="ic ok"><i class="bi bi-check-circle-fill"></i></span> Self-documenting — each card explains its mode</div>
+            <div class="row-line"><span class="ic ok"><i class="bi bi-check-circle-fill"></i></span> Best for onboarding new Cobrowse users</div>
+            <div class="row-line"><span class="ic no"><i class="bi bi-x-circle-fill"></i></span> Extra tap to start a session vs. landing on form</div>
+          </div>
+          <a class="open-btn" href="option-3-launcher.html" target="_blank"><i class="bi bi-eye"></i> Open prototype</a>
+        </div>
+      </div>
+
+      <!-- ============ Option 4 ============ -->
+      <div class="option-card">
+        <div class="option-thumb">
+          <svg viewBox="0 0 280 170" xmlns="http://www.w3.org/2000/svg">
+            <rect width="280" height="170" fill="#fafbfc"/>
+            <rect x="80" y="14" width="180" height="140" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="80" y="14" width="180" height="14" fill="#fff" stroke="#e5e7eb"/>
+            <text x="170" y="24" fill="#2d3748" font-size="8" text-anchor="middle" font-weight="600">Blitzz · fixed header</text>
+            <rect x="86" y="30" width="168" height="14" rx="999" fill="#edf2f7"/>
+            <rect x="89" y="32" width="80" height="10" rx="999" fill="#fff"/>
+            <text x="129" y="40" fill="#2b6cb0" font-size="7" text-anchor="middle" font-weight="700">📹 Video Support</text>
+            <text x="210" y="40" fill="#68737d" font-size="7" text-anchor="middle">🖥 Cobrowse</text>
+            <rect x="80" y="48" width="90" height="18" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="170" y="48" width="90" height="18" fill="#fafbfc" stroke="#e5e7eb"/>
+            <rect x="80" y="64" width="90" height="2" fill="#2b6cb0"/>
+            <text x="125" y="60" fill="#2b6cb0" font-size="9" text-anchor="middle" font-weight="600">▶ Sessions</text>
+            <text x="215" y="60" fill="#68737d" font-size="9" text-anchor="middle">🕘 History</text>
+            <rect x="86" y="74" width="166" height="20" rx="3" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="86" y="98" width="166" height="22" rx="4" fill="#fff" stroke="#e5e7eb"/>
+            <rect x="86" y="124" width="166" height="22" rx="4" fill="#fff" stroke="#e5e7eb"/>
+          </svg>
+        </div>
+        <div class="option-body">
+          <span class="option-tag">★ OPTION 4</span>
+          <h3>Mode pill + Function tabs</h3>
+          <p>Slim iOS-style mode pill at top sets context. Below, <strong>Sessions</strong> / <strong>History</strong> tabs. Changing mode keeps you on the same tab.</p>
+          <div class="pros-cons">
+            <div class="row-line"><span class="ic ok"><i class="bi bi-check-circle-fill"></i></span> Smallest vertical chrome</div>
+            <div class="row-line"><span class="ic ok"><i class="bi bi-check-circle-fill"></i></span> Mode persists across tab switches</div>
+            <div class="row-line"><span class="ic no"><i class="bi bi-x-circle-fill"></i></span> Pill toggle less discoverable than tabs</div>
+          </div>
+          <a class="open-btn" href="option-4-mode-chip.html" target="_blank"><i class="bi bi-eye"></i> Open prototype</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-note">
+      Built by <strong>Blitzz</strong> · 29 Jun 2026 · all data is mocked · safe to share with the client.
+    </div>
+
+  </div>
+</body>
+</html>
